@@ -45,6 +45,20 @@ The domain is on Adobe Portfolio today. To point it here, Matt (or whoever holds
 to the ones the host asks for, and the host issues the certificate by itself. Adobe Portfolio keeps working until that moment.
 After that, add `https://mattschantz.com` (and `https://www.mattschantz.com`) to the CORS origins as above.
 
+### Contact form
+
+The form posts the message as JSON to the address in the dashboard (*Site texts and settings > Contact and links > Contact form address*).
+Until that address is set, the Send button opens the visitor's own email app with the message written (it needs the email address field).
+Matt's address is not shown on the page (it is only shown if "Show the email address in the contact window" is switched on).
+
+Set it up once with **Formspree** (free plan: 50 messages a month; the form on the site already speaks its format):
+1. Sign up at https://formspree.io with Matt's email (it is the address the messages are forwarded to; they send a confirmation link to that mailbox).
+2. *New form*, name it for example "Matt Schantz site", and copy the endpoint, which looks like `https://formspree.io/f/abcdwxyz`.
+3. Paste it in the dashboard (Contact form address) and Publish. Send a test message from the site and confirm it arrives.
+4. In Formspree, under the form's *Settings*, add the site's domain to the allowed domains if you want only that site to be able to send.
+Other services work if they accept a JSON POST with `name`, `email`, `topic` and `message` and answer with a 2xx code (Getform, Basin, a Netlify/Vercel function).
+When the form goes through Formspree, mention it on the privacy page (the template names "the service that runs the contact form").
+
 ### Privacy
 
 - The site sets no cookies and has no analytics; the browser only stores the dark/light choice and the mute choice.

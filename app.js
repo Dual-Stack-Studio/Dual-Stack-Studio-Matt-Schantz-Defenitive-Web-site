@@ -425,7 +425,7 @@ new MutationObserver(() => {                                     // music steps 
 /* ------------------------------------------------ contact popup */
 const cmodal = $('#contactModal'), cform = $('#cform'), cpanel = $('.cpanel', cmodal), CFG = window.CONTACT || {};
 let cOpen = false, cBusy = false, cOpener = null, cTopic = '';
-if (CFG.email) { $('#cmail').textContent = CFG.email; $('#cmail').href = 'mailto:' + CFG.email; } else $('#cmail').style.display = 'none';
+if (CFG.showEmail && CFG.email) { $('#cmail').textContent = CFG.email; $('#cmail').href = 'mailto:' + CFG.email; } else $('#cmail').style.display = 'none';        // the address is only shown when the dashboard says so
 function openContact(from) {
   if (cOpen || cBusy) return;
   cOpen = true; cOpener = from || document.activeElement;
@@ -485,7 +485,7 @@ ${v.email}`;
     location.href = `mailto:${CFG.email}?subject=${encodeURIComponent((cTopic ? cTopic + ': ' : '') + 'Message from ' + v.name)}&body=${encodeURIComponent(body)}`;
     await wait(900);
   } else sent = false;                                                                      // nowhere to send it: say so instead of pretending
-  if (!sent) { cBusy = false; $('#csend').disabled = false; $('#csend span').textContent = 'Send message'; $('#cfail').textContent = CFG.email || CFG.endpoint ? 'Something went wrong. Please try again, or write to ' + (CFG.email || 'me directly') + '.' : 'The contact form is not set up yet. Please come back soon.'; return; }
+  if (!sent) { cBusy = false; $('#csend').disabled = false; $('#csend span').textContent = 'Send message'; $('#cfail').textContent = CFG.endpoint ? 'Something went wrong. Please try again in a moment.' : CFG.email ? 'Something went wrong. Please try again, or write to ' + CFG.email + '.' : 'The contact form is not set up yet. Please come back soon.'; return; }
   $('#cthx').textContent = 'Thank you, ' + v.name.split(' ')[0] + '.';
   cmodal.classList.add('sent');
   await wait(3200);                                                                        // time to read the thank-you

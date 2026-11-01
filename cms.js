@@ -16,7 +16,7 @@
       siteName,pageTitle,pageDescription,loadingText,defaultTheme,hideThemeSwitch,accentDark,accentLight,
       heroLine1,heroLine2,heroTagline,heroImageAlt,subjects,places,aboutHeading,aboutText,
       hiddenSections,navAbout,navPhotography,navVideos,navWriting,navContact,helloLabel,labelSubjects,labelPortfolio,
-      email,formEndpoint,instagramUrl,youtubeUrl,otherLinks[]{label,url},
+      email,showEmail,formEndpoint,instagramUrl,youtubeUrl,otherLinks[]{label,url},
       contactTitle,contactIntro,contactTopics,thanksTitle,thanksText,ctaLine,ctaBold,
       footerLegal,footerCredit,hideFooterCredit,footerExtra,privacyLabel,contactNote,
       musicEnabled,musicVolume,"musicUrl":musicFile.asset->url,
@@ -140,7 +140,7 @@
     } else if (Array.isArray(s.contactTopics)) { const f = $('.chipsf'); if (f) f.style.display = 'none'; }
     setText('#cthx', s.thanksTitle);
     setText('#cthxt', s.thanksText);
-    window.CONTACT = { endpoint: s.formEndpoint || '', email: s.email || '' };
+    window.CONTACT = { endpoint: s.formEndpoint || '', email: s.email || '', showEmail: s.showEmail === true };
   }
 
   function texts(s, P) {

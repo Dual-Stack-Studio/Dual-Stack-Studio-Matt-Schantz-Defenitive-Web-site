@@ -89,13 +89,14 @@ export const siteSettings = defineType({
     defineField({name: 'labelPortfolio', title: 'Section title: Portfolio', type: 'string', group: 'menu'}),
 
     // ---------------------------------------------------------------- Contact and links
-    defineField({name: 'email', title: 'Email address', type: 'string', group: 'contact', description: 'Shown in the contact window.'}),
+    defineField({name: 'email', title: 'Email address', type: 'string', group: 'contact', description: 'Where messages are sent when there is no contact form address below, and the address on the privacy page.'}),
+    defineField({name: 'showEmail', title: 'Show the email address in the contact window', type: 'boolean', group: 'contact', initialValue: false, description: 'Off keeps your address out of the page, so robots cannot collect it. Messages still reach you through the contact form.'}),
     defineField({
       name: 'formEndpoint',
       title: 'Contact form address',
       type: 'url',
       group: 'contact',
-      description: 'The web address of the service that forwards the messages to your email (Formspree, Getform, Web3Forms). Leave empty and the form only pretends to send.',
+      description: 'The web address of the service that forwards the messages to your email, for example https://formspree.io/f/xxxxxxxx (see the README, "Contact form"). While it is empty, the Send button opens the visitor’s own email app with the message written.',
     }),
     defineField({name: 'instagramUrl', title: 'Instagram link', type: 'url', group: 'contact'}),
     defineField({name: 'youtubeUrl', title: 'YouTube channel link', type: 'url', group: 'contact'}),
