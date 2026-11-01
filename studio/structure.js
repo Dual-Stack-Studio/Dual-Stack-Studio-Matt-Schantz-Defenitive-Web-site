@@ -1,4 +1,4 @@
-import {HomeIcon, CogIcon, ImagesIcon, PlayIcon, TextIcon} from './components/icons'
+import {HomeIcon, CogIcon, ImagesIcon, PlayIcon, TextIcon, LockIcon} from './components/icons'
 import {WelcomePane} from './components/WelcomePane'
 
 // Left-hand menu: "Site texts and settings" is a single page (not a list), the rest are lists.
@@ -13,6 +13,7 @@ export const structure = (S) =>
         .id('siteSettings')
         .icon(CogIcon)
         .child(S.document().schemaType('siteSettings').documentId('siteSettings').title('Site texts and settings')),
+      S.listItem().title('Privacy Policy').id('privacyPage').icon(LockIcon).child(S.document().schemaType('privacyPage').documentId('privacyPage').title('Privacy Policy')),
       S.divider(),
       S.documentTypeListItem('project').title('Photography projects').icon(ImagesIcon),
       S.documentTypeListItem('video').title('Videos').icon(PlayIcon),

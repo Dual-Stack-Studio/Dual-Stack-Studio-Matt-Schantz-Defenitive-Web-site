@@ -4,6 +4,8 @@
 // Optional:  SEED_MUSIC=<path to an mp3>  SEED_CTA_DARK=<photo>  SEED_CTA_LIGHT=<photo>
 import fs from 'node:fs'
 import path from 'node:path'
+import vm from 'node:vm'
+import {fileURLToPath} from 'node:url'
 import {getCliClient} from 'sanity/cli'
 
 const client = getCliClient({apiVersion: '2025-01-01'})
@@ -31,6 +33,8 @@ const defaults = {
   footerLegal: '© 2026 Matt Schantz.',
   footerCredit: 'Designed and built by Dual-Stack Studio',
   hideFooterCredit: false,
+  privacyLabel: 'Privacy Policy',
+  contactNote: 'By sending this message you agree that I use your details only to reply to you.',
   musicEnabled: true,
   musicVolume: 17,
 }
@@ -46,3 +50,28 @@ if (process.env.SEED_MUSIC && !now.musicFile) {
 }
 await client.patch('siteSettings').setIfMissing({...defaults, ...extra}).commit()
 console.log('Site texts ready.')
+
+// the privacy policy page: the text that ships with the site (../privacy-default.js), only if the page does not exist yet
+const key = () => Math.random().toString(36).slice(2, 12)
+const win = {}
+vm.runInNewContext(fs.readFileSync(path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', 'privacy-default.js'), 'utf8'), {window: win})
+const D = win.PRIVACY_DEFAULT
+function inline(text) {                                        // **bold**, *italic*, [text](url) to Portable Text spans
+  const markDefs = [], children = []
+  const re = /\*\*([^*]+)\*\*|\*([^*]+)\*|\[([^\]]+)\]\((https?:[^)\s]+)\)/g
+  let last = 0, m
+  const span = (t, marks = []) => children.push({_type: 'span', _key: key(), text: t, marks})
+  while ((m = re.exec(text))) {
+    if (m.index > last) span(text.slice(last, m.index))
+    if (m[1]) span(m[1], ['strong'])
+    else if (m[2]) span(m[2], ['em'])
+    else { const k = key(); markDefs.push({_key: k, _type: 'link', href: m[4]}); span(m[3], [k]) }
+    last = m.index + m[0].length
+  }
+  if (last < text.length) span(text.slice(last))
+  return {markDefs, children}
+}
+const body = D.body.map((b) => ({_type: 'block', _key: key(), style: b.t === 'h2' ? 'h2' : 'normal', ...(b.t === 'li' ? {listItem: 'bullet', level: 1} : {}), ...inline(b.x)}))
+const existing = await client.getDocument('privacyPage')
+if (!existing) { await client.create({_id: 'privacyPage', _type: 'privacyPage', title: D.title, updated: D.updated, body}); console.log('Privacy Policy page created.') }
+else console.log('Privacy Policy page already exists, left as it is.')

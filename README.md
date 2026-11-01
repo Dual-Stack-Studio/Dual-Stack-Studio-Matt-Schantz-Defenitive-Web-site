@@ -8,6 +8,9 @@ index.html, style.css, light.css   the design (dark look and light look)
 app.js, loader.js                  the behaviour (carousel, mosaic, lightbox, reader, contact window, music)
 cms.js, cms-config.js              asks Sanity for the content and puts it on the page
 studio/                            the dashboard (Sanity Studio) and its schemas
+privacy.html, privacy.css          the privacy policy page (text comes from the dashboard; privacy-default.js is the built-in copy)
+fonts/, fonts.css                  the fonts, hosted on the site (no request goes to Google)
+vercel.json                        clean URLs (/privacy instead of /privacy.html)
 ```
 
 Nothing about Matt's content is stored in this repository: photos, texts, links and music are all in the dashboard (the site folder has no photos at all).
@@ -42,13 +45,20 @@ The domain is on Adobe Portfolio today. To point it here, Matt (or whoever holds
 to the ones the host asks for, and the host issues the certificate by itself. Adobe Portfolio keeps working until that moment.
 After that, add `https://mattschantz.com` (and `https://www.mattschantz.com`) to the CORS origins as above.
 
+### Privacy
+
+- The site sets no cookies and has no analytics; the browser only stores the dark/light choice and the mute choice.
+- The privacy page (`/privacy`) is edited in the dashboard under **Privacy Policy** (left menu). If the dashboard cannot be reached, the page shows the text in `privacy-default.js`.
+- If anything is added later that sets cookies or tracks visitors (analytics, ads, pixels, embeds that load without a click), update that page and add a consent banner.
+- The text is a plain-language template, not legal advice. Matt should read it and keep it true (for example the two-year retention and the services named in it).
+
 ### Things that are fixed in the code (not in the dashboard)
 
 - Social-media link previews (the picture and text when the link is shared) use the title and description written in `index.html`;
   the dashboard changes them for browsers and Google, but chat apps do not run scripts. Edit the `<title>` and `<meta name="description">`
   in `index.html` if they should match.
-- The fonts (Google Fonts), the loading curtain animation, the layout of the carousel and the mosaic.
-- When you change a file, raise the version text (`20261101a` today) in `index.html` and `cms.js` so visitors do not get stale copies.
+- The fonts (self-hosted in `fonts/`), the loading curtain animation, the layout of the carousel and the mosaic.
+- When you change a file, raise the version text (`20261101b` today) in `index.html` and `cms.js` so visitors do not get stale copies.
 
 ## Local preview
 

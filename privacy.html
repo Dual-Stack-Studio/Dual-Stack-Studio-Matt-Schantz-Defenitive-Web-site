@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Privacy Policy</title>
+<meta name="description" content="How this site handles your information.">
+<meta name="robots" content="index,follow">
+<meta name="theme-color" content="#060b0e">
+<link rel="stylesheet" href="fonts.css?v=20261101b">
+<script>(function(){var t='dark';try{var q=/[?&]theme=(light|dark)/.exec(location.search);t=q?q[1]:(localStorage.getItem('mattTheme')||'dark');}catch(e){}
+if(t!=='light')t='dark';document.documentElement.dataset.theme=t;
+if(t==='light')document.querySelector('meta[name="theme-color"]').content='#e8ecea';
+document.write('<link rel="stylesheet" href="'+(t==='light'?'light':'style')+'.css?v=20261101b">')})()</script>
+<noscript><link rel="stylesheet" href="style.css?v=20261101b"></noscript>
+<link rel="stylesheet" href="privacy.css?v=20261101b">
+</head>
+<body class="pvbody">
+<header class="pvtop">
+  <a class="pvlogo" href="index.html" aria-label="Back to the site"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 19.5 9.5 7l4.2 7 2.8-4 5 9.5z"/><circle cx="17.6" cy="5.6" r="1.7"/></svg><span id="pvName">Matt Schantz</span></a>
+  <a class="pvback" href="index.html">&larr; Back to the site</a>
+</header>
+
+<main class="pv" id="pv">
+  <p class="pvkick"><b>+</b>Legal</p>
+  <h1 id="pvTitle">Privacy Policy</h1>
+  <p class="pvdate" id="pvDate"></p>
+  <div class="pvbody-text" id="pvText"></div>
+  <p class="pvcontact" id="pvContact"></p>
+</main>
+
+<footer class="pvfoot"><a href="index.html">Matt Schantz</a></footer>
+
+<script src="privacy-default.js?v=20261101b"></script>
+<script src="cms-config.js?v=20261101b"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const safeUrl = u => /^(https?:|mailto:)/i.test(u) ? u : '#';
+  const dateText = d => { try { return new Date(d + 'T12:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }); } catch (e) { return d; } };
+
+  // mini markup of the built-in text:  **bold**  *italic*  [text](https://link)
+  const md = s => esc(s).replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, (_, t, u) => `<a href="${safeUrl(u.replace(/&amp;/g, '&'))}" target="_blank" rel="noopener">${t}</a>`).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/\*([^*]+)\*/g, '<em>$1</em>');
+  function fromDefault(d) {
+    let html = '', list = false;
+    d.body.forEach(b => {
+      if (b.t !== 'li' && list) { html += '</ul>'; list = false; }
+      if (b.t === 'li') { if (!list) { html += '<ul>'; list = true; } html += `<li>${md(b.x)}</li>`; }
+      else if (b.t === 'h2') html += `<h2>${md(b.x)}</h2>`;
+      else html += `<p>${md(b.x)}</p>`;
+    });
+    return html + (list ? '</ul>' : '');
+  }
+
+  // Sanity's text format (Portable Text) to HTML
+  function spans(block) {
+    const defs = {}; (block.markDefs || []).forEach(m => { defs[m._key] = m; });
+    return (block.children || []).map(c => {
+      let t = esc(c.text || '').replace(/\n/g, '<br>');
+      (c.marks || []).forEach(m => {
+        if (m === 'strong') t = `<strong>${t}</strong>`;
+        else if (m === 'em') t = `<em>${t}</em>`;
+        else if (defs[m] && defs[m].href) t = `<a href="${esc(safeUrl(defs[m].href))}" target="_blank" rel="noopener">${t}</a>`;
+      });
+      return t;
+    }).join('');
+  }
+  function fromPortable(blocks) {
+    let html = '', list = false;
+    blocks.forEach(b => {
+      if (b._type !== 'block') return;
+      if (b.listItem && !list) { html += '<ul>'; list = true; }
+      if (!b.listItem && list) { html += '</ul>'; list = false; }
+      const inner = spans(b); if (!inner.trim()) return;
+      if (b.listItem) html += `<li>${inner}</li>`;
+      else if (b.style === 'h2') html += `<h2>${inner}</h2>`;
+      else if (b.style === 'h3') html += `<h3>${inner}</h3>`;
+      else if (b.style === 'blockquote') html += `<blockquote>${inner}</blockquote>`;
+      else html += `<p>${inner}</p>`;
+    });
+    return html + (list ? '</ul>' : '');
+  }
+
+  function show(title, updated, html, email, name) {
+    $('pvTitle').textContent = title; document.title = title + (name ? ' · ' + name : '');
+    $('pvDate').textContent = updated ? 'Last updated: ' + dateText(updated) : '';
+    $('pvText').innerHTML = html;
+    if (name) $('pvName').textContent = name;
+    $('pvContact').innerHTML = email ? `Questions, or want something changed or deleted? Write to <a href="mailto:${esc(email)}">${esc(email)}</a>.` : '';
+    document.documentElement.classList.add('pv-ready');
+  }
+
+  const D = window.PRIVACY_DEFAULT, CFG = window.SANITY || {};
+  const fallback = (email, name) => show(D.title, D.updated, fromDefault(D), email, name);
+  if (!CFG.projectId) { fallback('', ''); return; }
+
+  const q = '{"p": *[_id=="privacyPage"][0]{title,updated,body}, "s": *[_id=="siteSettings"][0]{email,siteName,privacyLabel}}';
+  const url = `https://${CFG.projectId}.apicdn.sanity.io/v2025-01-01/data/query/${CFG.dataset || 'production'}?query=${encodeURIComponent(q)}`;
+  const ctrl = new AbortController(), t = setTimeout(() => ctrl.abort(), 8000);
+  fetch(url, { signal: ctrl.signal }).then(r => r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status))).then(({ result: R }) => {
+    const s = R.s || {}, p = R.p;
+    const html = p && p.body && p.body.length ? fromPortable(p.body) : '';
+    if (html) show(p.title || s.privacyLabel || D.title, p.updated, html, s.email || '', s.siteName || '');
+    else fallback(s.email || '', s.siteName || '');
+  }).catch(() => fallback('', '')).then(() => clearTimeout(t));
+})();
+</script>
+</body>
+</html>

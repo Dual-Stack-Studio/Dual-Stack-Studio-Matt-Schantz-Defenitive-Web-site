@@ -20,7 +20,8 @@ The first page, **Start here**, explains each part.
   - *About*: the big sentence and the text.
   - *Menu and sections*: rename the menu words, **hide any part of the page** (About, Places, Subjects, Photography, Videos, Writing).
   - *Contact and links*: email, contact form address, Instagram, YouTube, extra links, the texts of the contact window, the photo and lines at the bottom.
-  - *Footer*: the small print and the credit line.
+  - *Footer*: the small print, the credit line and the name of the privacy link.
+- **Privacy Policy** (left menu): the page people open from the footer. Edit the text if the site changes (a new service, analytics, a form provider) and update the date.
   - *Name, title and look*: site name, page title and description, which look people see first (dark or light), accent colours, hide the dark/light switch.
   - *Music*: turn the music on or off, upload your own MP3, set the volume.
 - **To take something off the site without losing it**: open it, switch on **Hide from the site**, Publish. Switch it off to bring it back.

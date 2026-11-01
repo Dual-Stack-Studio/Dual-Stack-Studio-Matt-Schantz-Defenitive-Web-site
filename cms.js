@@ -2,7 +2,7 @@
    (loader.js and app.js). Everything the dashboard can change is applied here, before the site starts, so the
    loading curtain hides the swap. If Sanity cannot be reached, the site still opens (with empty parts hidden). */
 (() => {
-  const VER = '20261101a';
+  const VER = '20261101b';
   const CFG = window.SANITY || {};
   const load = src => new Promise(res => {
     const s = document.createElement('script'); s.src = src + '?v=' + VER; s.async = false; s.onload = s.onerror = res; document.body.append(s);
@@ -18,7 +18,7 @@
       hiddenSections,navAbout,navPhotography,navVideos,navWriting,navContact,helloLabel,labelSubjects,labelPortfolio,
       email,formEndpoint,instagramUrl,youtubeUrl,otherLinks[]{label,url},
       contactTitle,contactIntro,contactTopics,thanksTitle,thanksText,ctaLine,ctaBold,
-      footerLegal,footerCredit,hideFooterCredit,footerExtra,
+      footerLegal,footerCredit,hideFooterCredit,footerExtra,privacyLabel,contactNote,
       musicEnabled,musicVolume,"musicUrl":musicFile.asset->url,
       "hero":heroImage.asset->${dims},"ctaDark":ctaImageDark.asset->url,"ctaLight":ctaImageLight.asset->url
     },
@@ -180,6 +180,7 @@
     if (light && $('.ph-light')) $('.ph-light').src = light;
     // footer
     setText('#lgLegal', s.footerLegal); setText('#lgExtra', s.footerExtra);
+    setText('#lgPrivacy', s.privacyLabel); setText('#cnoteLink', s.privacyLabel); setText('#cnoteText', s.contactNote);
     if (s.hideFooterCredit) { const c = $('#lgCredit'); if (c) c.remove(); } else setText('#lgCredit', s.footerCredit);
     // look and music
     accent(s); theme(s);

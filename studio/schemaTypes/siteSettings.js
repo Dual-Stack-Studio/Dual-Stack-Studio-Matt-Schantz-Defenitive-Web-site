@@ -127,6 +127,7 @@ export const siteSettings = defineType({
       of: [defineArrayMember({type: 'string'})],
       description: 'The little buttons people can tick (for example Photography, Video). Leave it empty to remove them.',
     }),
+    defineField({name: 'contactNote', title: 'Contact window: note under the Send button', type: 'string', group: 'contact', description: 'A short sentence about how you use their details. A link to the privacy page follows it.'}),
     defineField({name: 'thanksTitle', title: 'After sending: title', type: 'string', group: 'contact'}),
     defineField({name: 'thanksText', title: 'After sending: text', type: 'text', rows: 2, group: 'contact'}),
     defineField({name: 'ctaLine', title: 'Big photo at the bottom: small line', type: 'string', group: 'contact', description: 'For example: A road, a place, a story.'}),
@@ -144,6 +145,7 @@ export const siteSettings = defineType({
     defineField({name: 'footerLegal', title: 'Small print', type: 'string', group: 'footer', description: 'For example: © 2026 Matt Schantz.'}),
     defineField({name: 'footerCredit', title: 'Credit line', type: 'string', group: 'footer', description: 'Empty keeps the original line.'}),
     defineField({name: 'hideFooterCredit', title: 'Hide the credit line', type: 'boolean', group: 'footer', initialValue: false}),
+    defineField({name: 'privacyLabel', title: 'Privacy page: name of the link', type: 'string', group: 'footer', description: 'The link in the footer and under the contact form. For example: Privacy Policy. The page itself is edited under "Privacy Policy" in the left menu.'}),
     defineField({name: 'footerExtra', title: 'Extra small word (optional)', type: 'string', group: 'footer', description: 'For example: Privacy Policy. It is shown as text only.'}),
 
     // ---------------------------------------------------------------- Name, title and look

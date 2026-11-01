@@ -709,3 +709,8 @@ html[data-theme="light"] .thm .sp:nth-of-type(3),html[data-theme="light"] .thm .
 @media (max-width:560px){.thm-o{right:calc(var(--pad) + 168px)}}
 @media (prefers-reduced-motion:reduce){.thm .tk,.thm .cut,.thm .rays{transition-duration:.01s}.thm .sp{animation:none!important}}
 .cta .ph-dark{display:none}
+
+/* privacy: link in the footer and the note under the contact form */
+.cnote{font:400 12px/1.5 var(--jost);color:var(--mut)}.cnote a{color:var(--teal);text-decoration:underline;text-underline-offset:3px}
+.legal .lgp{color:var(--mut);transition:color .3s}.legal .lgp:hover{color:var(--teal)}
+.legal{flex-wrap:wrap;gap:10px 28px}
