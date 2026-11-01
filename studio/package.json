@@ -9,7 +9,8 @@
     "build": "sanity build",
     "deploy": "sanity deploy",
     "seed": "sanity exec scripts/seed-site.mjs --with-user-token",
-    "photos": "sanity exec scripts/upgrade-photos.mjs --with-user-token"
+    "photos": "sanity exec scripts/upgrade-photos.mjs --with-user-token",
+    "warm": "sanity exec scripts/warm-images.mjs --with-user-token"
   },
   "dependencies": {
     "@sanity/icons": "^5.2.3",

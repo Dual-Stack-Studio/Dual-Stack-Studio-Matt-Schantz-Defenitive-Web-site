@@ -9,8 +9,9 @@ const VH = () => document.documentElement.clientHeight || window.innerHeight;
 const touch = matchMedia('(hover: none)').matches;
 const isUrl = p => /^https?:/.test(p);
 const sz = (u, w, q) => /cdn\.sanity\.io/.test(u) && !u.includes('?') ? `${u}?w=${w}&q=${q}&fit=max&auto=format` : u;        // Sanity resizes images on the fly
-const A = p => isUrl(p) ? sz(p, 3840, 90) : 'assets/' + p;                 // lightbox and project header: the sharpest the photo allows
-const mid = src => isUrl(src) ? sz(src, 1800, 84) : 'mid/' + src.replace(/^matt\//, '').replace('/', '-');       // 1200 px copy: carousel and mosaic use it, the lightbox and the project header use the full file
+const IS = window.IMGSZ;
+const A = p => isUrl(p) ? (p.includes('?') ? p : IS.full(p)) : 'assets/' + p;       // lightbox and project header: as sharp as the screen can show
+const mid = src => isUrl(src) ? (src.includes('?') ? src : IS.mid(src)) : 'mid/' + src.replace(/^matt\//, '').replace('/', '-');       // 1200 px copy: carousel and mosaic use it, the lightbox and the project header use the full file
 const MAN = window.MAN || {};
 const ratio = p => { const m = MAN[p]; return m ? m[0] / m[1] : 1.5; };
 const P = window.PROJECTS, V = window.VIDEOS;

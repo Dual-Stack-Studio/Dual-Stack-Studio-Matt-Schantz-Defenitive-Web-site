@@ -7,7 +7,7 @@
   if (!el) { root.classList.remove('is-loading'); window.__ready = true; finish(); return; }
 
   const bar = el.querySelector('.lbar i'), pct = el.querySelector('.lpct');
-  const mid = src => /^https?:/.test(src) ? src + (src.includes('?') ? '' : '?w=1800&q=84&fit=max&auto=format') : 'assets/mid/' + src.replace(/^matt\//, '').replace('/', '-');
+  const mid = src => /^https?:/.test(src) ? (src.includes('?') ? src : window.IMGSZ.mid(src)) : 'assets/mid/' + src.replace(/^matt\//, '').replace('/', '-');
   const heroEl = document.querySelector('.hero-photo img'), hero = heroEl ? heroEl.getAttribute('src') : null;
   const list = [hero].concat((window.PROJECTS || []).map(p => p.cover ? mid(p.cover) : null)).filter(Boolean);
   const total = list.length + 1;                                   // the images plus the fonts

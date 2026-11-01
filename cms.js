@@ -2,7 +2,7 @@
    (loader.js and app.js). Everything the dashboard can change is applied here, before the site starts, so the
    loading curtain hides the swap. If Sanity cannot be reached, the site still opens (with empty parts hidden). */
 (() => {
-  const VER = '20261101b';
+  const VER = '20261101c';
   const CFG = window.SANITY || {};
   const load = src => new Promise(res => {
     const s = document.createElement('script'); s.src = src + '?v=' + VER; s.async = false; s.onload = s.onerror = res; document.body.append(s);
@@ -10,7 +10,8 @@
   const start = () => load('loader.js').then(() => load('app.js'));
   if (!CFG.projectId) { start(); return; }
 
-  const dims = '{"url":url,"w":metadata.dimensions.width,"h":metadata.dimensions.height}';
+  const dims = '{"url":url,"w":metadata.dimensions.width,"h":metadata.dimensions.height,"c":metadata.palette.dominant.background}';          // photos: size and average colour
+  const dimsL = '{"url":url,"w":metadata.dimensions.width,"h":metadata.dimensions.height,"c":metadata.palette.dominant.background,"l":metadata.lqip}';   // the big ones also bring a tiny blurred preview
   const QUERY = `{
     "settings": *[_id=="siteSettings"][0]{
       siteName,pageTitle,pageDescription,loadingText,defaultTheme,hideThemeSwitch,accentDark,accentLight,
@@ -20,9 +21,9 @@
       contactTitle,contactIntro,contactTopics,thanksTitle,thanksText,ctaLine,ctaBold,
       footerLegal,footerCredit,hideFooterCredit,footerExtra,privacyLabel,contactNote,
       musicEnabled,musicVolume,"musicUrl":musicFile.asset->url,
-      "hero":heroImage.asset->${dims},"ctaDark":ctaImageDark.asset->url,"ctaLight":ctaImageLight.asset->url
+      "hero":heroImage.asset->${dimsL},"ctaDark":ctaImageDark.asset->url,"ctaLight":ctaImageLight.asset->url
     },
-    "projects": *[_type=="project" && !(hidden==true) && defined(cover.asset)] | order(date desc, _createdAt desc){_id,title,subtitle,date,blurb,"cover":cover.asset->${dims},"photos":photos[defined(image.asset)]{caption,"a":image.asset->${dims}}},
+    "projects": *[_type=="project" && !(hidden==true) && defined(cover.asset)] | order(date desc, _createdAt desc){_id,title,subtitle,date,blurb,"cover":cover.asset->${dimsL},"photos":photos[defined(image.asset)]{caption,"a":image.asset->${dims}}},
     "videos": *[_type=="video" && !(hidden==true) && defined(youtubeUrl)] | order(coalesce(date,"0000") desc, _createdAt desc){_id,title,youtubeUrl},
     "writings": *[_type=="writing" && !(hidden==true)] | order(date desc){_id,title,date,tag,excerpt,"cover":cover{"url":asset->url,caption},body[]{..., _type=="image" => {"url":asset->url}}}
   }`;
@@ -36,12 +37,13 @@
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const man = window.MAN = window.MAN || {};
+  const LQ = window.LQ = window.LQ || {};
   const has = v => v != null && String(v).trim() !== '';
 
   function projects(list) {
     return list.filter(p => p.cover && p.cover.url && p.photos && p.photos.length).map((p, i) => {
-      man[p.cover.url] = [p.cover.w, p.cover.h];
-      const items = p.photos.filter(x => x.a && x.a.url).map(x => { man[x.a.url] = [x.a.w, x.a.h]; return { t: 'img', src: x.a.url, cap: x.caption || '' }; });
+      man[p.cover.url] = [p.cover.w, p.cover.h]; LQ[p.cover.url] = { c: p.cover.c, l: p.cover.l };
+      const items = p.photos.filter(x => x.a && x.a.url).map(x => { man[x.a.url] = [x.a.w, x.a.h]; LQ[x.a.url] = { c: x.a.c }; return { t: 'img', src: x.a.url, cap: x.caption || '' }; });
       const ar = p.cover.w / p.cover.h, dow = ['cascade', 'river', 'zigzag'][i % 3];
       return {
         id: p._id, n: pad(i + 1), title: p.title || 'Untitled', sub: p.subtitle || '', year: p.date ? p.date.slice(0, 4) : '', layout: dow,
@@ -157,7 +159,8 @@
     const hi = $('#heroImg');
     if (hi) {
       hi.alt = one(s.heroImageAlt) || one(s.siteName) || 'Photograph';
-      const src = s.hero && s.hero.url ? img(s.hero.url, 3200, 88) : (P[0] ? img(P[0].cover, 2400, 86) : '');
+      if (s.hero && s.hero.url) LQ[s.hero.url] = { c: s.hero.c, l: s.hero.l };
+      const src = s.hero && s.hero.url ? window.IMGSZ.hero(s.hero.url) : (P[0] ? window.IMGSZ.hero(P[0].cover) : '');
       if (src) hi.src = src;
     }
     // about

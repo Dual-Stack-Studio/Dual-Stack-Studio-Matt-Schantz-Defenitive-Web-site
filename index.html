@@ -5,8 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Matt Schantz</title>
 <meta name="description" content="Photography, video and writing by Matt Schantz.">
+<link rel="preconnect" href="https://cdn.sanity.io" crossorigin>
+<link rel="preconnect" href="https://db7bbxau.apicdn.sanity.io" crossorigin>
 <link rel="preload" href="fonts/Jost-normal-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="fonts.css?v=20261101b">
+<link rel="stylesheet" href="fonts.css?v=20261101c">
 <script>document.documentElement.classList.add("is-loading")</script>
 <style>/* loading screen: inline so it is styled even when a cached style.css is older than this page */
 ::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
@@ -37,8 +39,8 @@ html.is-loading,html.is-loading body{overflow:hidden}
 <script>(function(){var t='dark';try{var q=/[?&]theme=(light|dark)/.exec(location.search);t=q?q[1]:(localStorage.getItem('mattTheme')||'dark');if(q)localStorage.setItem('mattTheme',t)}catch(e){}
 if(t!=='light')t='dark';document.documentElement.dataset.theme=t;
 if(t==='light')document.querySelector('meta[name="theme-color"]').content='#e8ecea';
-document.write('<link rel="stylesheet" id="theme" href="'+(t==='light'?'light':'style')+'.css?v=20261101b">')})()</script>
-<noscript><link rel="stylesheet" href="style.css?v=20261101b"></noscript>
+document.write('<link rel="stylesheet" id="theme" href="'+(t==='light'?'light':'style')+'.css?v=20261101c">')})()</script>
+<noscript><link rel="stylesheet" href="style.css?v=20261101c"></noscript>
 </head>
 <body>
 <div id="loader" role="status" aria-live="polite" aria-label="Loading">
@@ -245,9 +247,11 @@ document.write('<link rel="stylesheet" id="theme" href="'+(t==='light'?'light':'
   <div class="dwrap" id="dwrap"></div>
 </div>
 
-<script src="manifest.js?v=20261101b"></script>
-<script src="data.js?v=20261101b"></script>
-<script src="cms-config.js?v=20261101b"></script>
-<script src="cms.js?v=20261101b"></script>
+<script src="manifest.js?v=20261101c"></script>
+<script src="data.js?v=20261101c"></script>
+<script src="cms-config.js?v=20261101c"></script>
+<script src="imgsz.js?v=20261101c"></script>
+<script src="smooth.js?v=20261101c"></script>
+<script src="cms.js?v=20261101c"></script>
 </body>
 </html>
