@@ -2,12 +2,12 @@
    (loader.js and app.js). Everything the dashboard can change is applied here, before the site starts, so the
    loading curtain hides the swap. If Sanity cannot be reached, the site still opens (with empty parts hidden). */
 (() => {
-  const VER = '20261101c';
+  const VER = '20261101d';
   const CFG = window.SANITY || {};
   const load = src => new Promise(res => {
     const s = document.createElement('script'); s.src = src + '?v=' + VER; s.async = false; s.onload = s.onerror = res; document.body.append(s);
   });
-  const start = () => load('loader.js').then(() => load('app.js'));
+  const start = () => load('loader.js').then(() => load('app.js')).then(() => load('ink.js'));
   if (!CFG.projectId) { start(); return; }
 
   const dims = '{"url":url,"w":metadata.dimensions.width,"h":metadata.dimensions.height,"c":metadata.palette.dominant.background}';          // photos: size and average colour

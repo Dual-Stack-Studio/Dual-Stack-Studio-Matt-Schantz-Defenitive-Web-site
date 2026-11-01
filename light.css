@@ -721,3 +721,9 @@ img.fx.in{opacity:1;animation:fxIn .9s ease}
 .hero-photo img.fx.in{animation:fxIn .9s ease,hz 24s ease-in-out infinite alternate}
 @keyframes fxIn{from{opacity:0}to{opacity:1}}
 @media (prefers-reduced-motion:reduce){img.fx.in,.hero-photo img.fx.in{animation:none}}
+
+/* the line under the name, letter by letter (ink.js): light on the photo, dark where the pale page shows */
+.hero-foot p.ink .c{color:var(--ink);text-shadow:none}
+.hero-foot p.ink .c.on{color:#f4f7f6;text-shadow:0 1px 14px rgba(0,0,0,.55)}
+.hero-foot p.live .c{transition:color .55s ease,text-shadow .55s ease}
+@media (prefers-reduced-motion:reduce){.hero-foot p.live .c{transition:none}}
